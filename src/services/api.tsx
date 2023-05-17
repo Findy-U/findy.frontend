@@ -1,22 +1,21 @@
-import axios, { AxiosError } from "axios";
-import { toast } from "react-toastify";
-import { CandidateUserRegister } from "../types/CandidateUserRegister";
+import axios, { AxiosError } from 'axios';
+import { toast } from 'react-toastify';
+import { CandidateUserRegister } from '../types/CandidateUserRegister';
 
 /* const token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjIzLCJuYW1lIjoiRGFyY2lvIENhcnZhbGhvIiwiZW1haWwiOiJkYXJjaW8uY2FydmFsaG8uZGV2QGdtYWlsLmNvbSIsInJvbGVzIjoiY2FuZGlkYXRlIiwiaWF0IjoxNjgxNDc5ODY4LCJleHAiOjE2ODE0ODc4Njh9.BP4yluPsDNGFGzMYn6Wuv6JQArxTnbiDJA4PU_-l3fQ"; */
 
 export const api = axios.create({
   //baseURL: "http://localhost:3001",
-  baseURL: 'https://findy-api.onrender.com',
+  baseURL: 'http://20.55.23.249:3001',
 });
 
-
 export const createUser = async (body: CandidateUserRegister) => {
-  return await api.post("/api/candidate-users", body, {
+  return await api.post('/api/candidate-users', body, {
     headers: {
-      "Content-Type": "application/json",
+      'Content-Type': 'application/json',
     },
   });
-}
+};
 
 export const createUserOld = async (body: any) => {
   try {
@@ -76,7 +75,7 @@ export const loginUser = async (email: string, password: string) => {
 export const formProject = async (body: any) => {
   try {
     return await api.post('/api/candidate-projects', body);
-  } catch (error: any) { }
+  } catch (error: any) {}
 };
 
 export const getProjects = async () => {
