@@ -1,20 +1,21 @@
-import { useState } from 'react';
+import { useContext, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 
-import { SubmitHandler, useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
+import { SubmitHandler, set, useForm } from 'react-hook-form';
 import * as yup from 'yup';
 
-import { CandidateUserRegister } from '../../types/CandidateUserRegister';
-import { Header } from '../../components/Header';
+import IconLockOpen from '../../assets/view_fill.svg';
+import IconLockClose from '../../assets/view_hide_fill.svg';
 import IconLock from '../../components/icons/IconConfirm';
-
 import { createUser } from '../../services/api';
+import { CandidateUserRegister } from '../../types/CandidateUserRegister';
 import { getErrorMessage } from '../../utils/ErrorMessageUtil';
 
 import c from '../../assets/c.svg';
 import { NavBar } from '../../components/menu/NavBar';
+import { RegisterContext } from '../../context/newRegister';
 
 const schema = yup
   .object()
@@ -42,6 +43,9 @@ const schema = yup
   .required();
 
 export function Cadastro() {
+  const { setIsRegistered } = useContext(RegisterContext);
+  const [showPassword, setShowPassword] = useState(false);
+  const [confirmShowPassword, setConfirmShowPassword] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
   const [isChecked, setIsChecked] = useState(false);
   const [activeSubmit, setActiveSubmit] = useState(false);
@@ -75,7 +79,8 @@ export function Cadastro() {
     try {
       const response = await createUser(data);
       toast.success('Conta criada com sucesso!');
-      navigate('/login');
+      setIsRegistered(true);
+      navigate('/confirmation-account');
     } catch (error) {
       toast.error(getErrorMessage(error));
     }
@@ -85,8 +90,8 @@ export function Cadastro() {
   };
 
   return (
-    <div className="w-max-[1483px] flex h-[100%] flex-col overflow-x-hidden bg-blue-dark opacity-90">
-      <NavBar home={false} />
+    <div className="w-max-[1483px] flex h-[100%] flex-col overflow-x-hidden bg-blue-dark">
+      <NavBar home={false} url="/" />
       <div className="my-auto flex flex-col items-center justify-center pt-[4.14rem] md:px-[2rem] xl:w-[100%] xl:justify-center mbl:px-[1.5rem]">
         <h1 className="mb-[1.1rem] text-[2.4rem] text-grey-#4">Crie uma Conta</h1>
         <form
@@ -126,16 +131,33 @@ export function Cadastro() {
           </div>
 
           <div className="w-[70%] sm:justify-center mbl:w-[85%] mbl:flex-col mbl:items-center ">
-            <input
-              type="password"
-              placeholder="Senha"
-              {...register('password')}
-              className={
-                errors.password
-                  ? 'h-[4.7rem] w-[100%] rounded-[0.8rem] border border-red pl-[2.06rem] text-[2.4rem] placeholder-grey-#2 mbl:mr-[1rem] mbl:h-[4.5rem] mbl:w-[100%] mbl:text-[1.3rem]'
-                  : 'h-[4.7rem] w-[100%] rounded-[0.8rem] border border-grey-#2 pl-[2.06rem] text-[2.4rem] focus:border-green-medium mbl:mr-[1rem] mbl:h-[4.5rem] mbl:w-[100%] mbl:text-[1.3rem]'
-              }
-            />
+            <div className="relative flex w-full items-center justify-end">
+              <input
+                type={`${showPassword ? 'text' : 'password'}`}
+                placeholder="Senha"
+                {...register('password')}
+                className={
+                  errors.password
+                    ? 'h-[4.7rem] w-[100%] rounded-[0.8rem] border border-red pl-[2.06rem] text-[2.4rem] placeholder-grey-#2 mbl:mr-[1rem] mbl:h-[4.5rem] mbl:w-[100%] mbl:text-[1.3rem]'
+                    : 'h-[4.7rem] w-[100%] rounded-[0.8rem] border border-grey-#2 pl-[2.06rem] text-[2.4rem] focus:border-green-medium mbl:mr-[1rem] mbl:h-[4.5rem] mbl:w-[100%] mbl:text-[1.3rem]'
+                }
+              />
+              {showPassword ? (
+                <img
+                  src={IconLockClose}
+                  alt="Icone de olho"
+                  className="absolute z-20 mr-2 w-10 cursor-pointer"
+                  onClick={() => setShowPassword(!showPassword)}
+                />
+              ) : (
+                <img
+                  src={IconLockOpen}
+                  alt="Icone de olho"
+                  className="absolute z-20 mr-2 w-10 cursor-pointer"
+                  onClick={() => setShowPassword(!showPassword)}
+                />
+              )}
+            </div>
 
             <div className="mt-[0.92rem] flex w-[70%] flex-col gap-1 pl-[0.5rem] text-[1.6rem] mbl:w-[90%] ">
               <div className="mt-[0.9rem] flex w-[39.7rem] mbl:text-[1.3rem]">
@@ -253,16 +275,33 @@ export function Cadastro() {
           </div>
 
           <div className="mt-[1.54rem] w-[70%] sm:justify-center mbl:flex mbl:w-[85%]">
-            <input
-              type="password"
-              placeholder="Confirmação de senha"
-              {...register('confirmPassword')}
-              className={
-                errors.confirmPassword
-                  ? 'h-[4.7rem] w-[100%] rounded-[0.8rem] border border-red pl-[1rem] text-[2.4rem] placeholder-red mbl:h-[4.5rem] mbl:w-[100%] mbl:text-[1.3rem]'
-                  : 'h-[4.7rem] w-[100%] rounded-[0.8rem] border border-grey-#2 pl-[2.06rem] text-[2.4rem] focus:border-green-medium mbl:h-[4.5rem] mbl:w-[100%] mbl:text-[1.3rem]'
-              }
-            />
+            <div className="relative flex w-full items-center justify-end">
+              <input
+                type={`${confirmShowPassword ? 'text' : 'password'}`}
+                placeholder="Confirmação de senha"
+                {...register('confirmPassword')}
+                className={
+                  errors.confirmPassword
+                    ? 'h-[4.7rem] w-[100%] rounded-[0.8rem] border border-red pl-[1rem] text-[2.4rem] placeholder-red mbl:h-[4.5rem] mbl:w-[100%] mbl:text-[1.3rem]'
+                    : 'h-[4.7rem] w-[100%] rounded-[0.8rem] border border-grey-#2 pl-[2.06rem] text-[2.4rem] focus:border-green-medium mbl:h-[4.5rem] mbl:w-[100%] mbl:text-[1.3rem]'
+                }
+              />
+              {confirmShowPassword ? (
+                <img
+                  src={IconLockClose}
+                  alt="Icone de olho"
+                  className="absolute z-20 mr-2 w-10 cursor-pointer"
+                  onClick={() => setConfirmShowPassword(!confirmShowPassword)}
+                />
+              ) : (
+                <img
+                  src={IconLockOpen}
+                  alt="Icone de olho"
+                  className="absolute z-20 mr-2 w-10 cursor-pointer"
+                  onClick={() => setConfirmShowPassword(!confirmShowPassword)}
+                />
+              )}
+            </div>
             <span className=" mb-[1rem] mt-[0.8rem] block  pl-[1rem] text-[1.8rem] text-red">
               {errors.confirmPassword ? errors.confirmPassword?.message : ''}{' '}
             </span>
@@ -296,11 +335,11 @@ export function Cadastro() {
               <div className="flex flex-col">
                 <p className="text-[1.7rem] text-grey-#1 mbl:text-[1.3rem]">
                   Eu concordo com os{' '}
-                  <Link to="#" className="mdl:text-[2rem] text-[#01A195]">
+                  <Link to="/general-terms" className="mdl:text-[2rem] text-[#01A195]">
                     Termos de Uso
                   </Link>{' '}
                   da plataforma e com as{' '}
-                  <Link to="#" className="mdl:text-[1rem] text-[#01A195]">
+                  <Link to="/privacy-policy" className="mdl:text-[1rem] text-[#01A195]">
                     Políticas de Privacidade.
                   </Link>{' '}
                 </p>
