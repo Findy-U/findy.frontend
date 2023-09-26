@@ -11,3 +11,4 @@ export const Menu = {
   Action: ActionLink,
   Button: ButtonAction
 };
+

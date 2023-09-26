@@ -11,12 +11,7 @@ export function ItemsLinks({ title, linkURL }: ItemsLinksProps) {
       <Link className="text-[18px] uppercase text-green-medium" to={linkURL}>
         {title}
       </Link>
-      {/* <Link className="text-[18px] uppercase text-green-medium" to="/">
-        A Findy
-      </Link>
-      <Link className="text-[18px] uppercase text-green-medium" to="/login">
-        Login
-      </Link> */}
+
     </>
   );
 }
