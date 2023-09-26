@@ -18,7 +18,7 @@ import { LogoSmall } from '../../../components/LogoSmall';
 export function Home() {
   const [larguraTela, setLarguraTela] = useState(window.innerWidth);
   const [candidateUser, setCandidateUser] = useState<any>();
-  const { isAuthenticated, getToken } = useContext(AuthContext);
+  const { isAuthenticated, getToken, signOut } = useContext(AuthContext);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -74,12 +74,28 @@ export function Home() {
       <Menu.Root>
         <LogoSmall />
         <Menu.MenuItems className="justify-between">
-          <Menu.Items />
+          <Menu.Items
+            title="A Findy"
+            linkURL="/"
+          />
+
+          {isAuthenticated ?
+            <Menu.Button
+              title="Logout"
+              action={signOut}
+            />
+            :
+            <Menu.Button
+              title="Login"
+              action={() => navigate('/login')}
+            />
+          }
+
           <Menu.Action url="/cadastro" text="Cadastro" />
         </Menu.MenuItems>
       </Menu.Root>
       <Landing />
       <FooterLand />
-    </main> 
+    </main>
   );
 }

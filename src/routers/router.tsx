@@ -12,7 +12,7 @@ import { ForgotPassword } from '../pages/ForgotPassword';
 import { Home } from '../pages/Home/mvp-1/index';
 import { Login } from '../pages/Login';
 import { PasswordRecovery } from '../pages/PasswordRecovery';
-import { Profile } from '../pages/Profile';
+import { Profile as ProfileOld } from '../pages/ProfileOld';
 import { Project } from '../pages/Project/index';
 import { ProjectRegistred } from '../pages/ProjectsRegistered';
 import { Survey } from '../pages/Survey/index';
@@ -23,6 +23,7 @@ import { ConfimationAccount } from '../pages/ConfirmationAccount';
 import { DashboardPage } from '../pages/Dashboard';
 import { GeneralTerms } from '../pages/GeneralTerms/index';
 import { PrivacyPolicy } from '../pages/PrivacyPolicy';
+import { Profile } from '../pages/Profile';
 
 export const AppRouter = () => {
   const [candidateUser, setCandidateUser] =
@@ -167,6 +168,22 @@ export const AppRouter = () => {
             element={
               <Private>
                 <DashboardPage />
+              </Private>
+            }
+          />
+          <Route
+            path="/profile-old"
+            element={
+              <Private>
+                <ProfileOld />
+              </Private>
+            }
+          />
+          <Route
+            path="/profile"
+            element={
+              <Private>
+                <Profile />
               </Private>
             }
           />
