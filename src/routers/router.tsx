@@ -23,6 +23,7 @@ import { ConfimationAccount } from '../pages/ConfirmationAccount';
 import { DashboardPage } from '../pages/Dashboard';
 import { GeneralTerms } from '../pages/GeneralTerms/index';
 import { PrivacyPolicy } from '../pages/PrivacyPolicy';
+import { Projects } from '../pages/Projects';
 
 export const AppRouter = () => {
   const [candidateUser, setCandidateUser] =
@@ -150,6 +151,7 @@ export const AppRouter = () => {
           <Route path="/password-recovery" element={<PasswordRecovery />} />
           <Route path="/privacy-policy" element={<PrivacyPolicy />} />
           <Route path="/general-terms" element={<GeneralTerms />} />
+          <Route path="/projects" element={<Projects />} />
 
           <Route
             path="/survey"
